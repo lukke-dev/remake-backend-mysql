@@ -1,41 +1,23 @@
-/* eslint-disable no-unused-vars */
-require("dotenv").config();
-const express = require("express");
-const app = express();
-const mysql = require("mysql2");
-const cors = require("cors");
+import dotenv from 'dotenv'
+import express from 'express';
+import mysql from 'mysql2'
+import cors from 'cors';
+import routes from './routes/routes.js'
 
+const app = express();
+dotenv.config({ path: './.env.local' })
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use('/', routes)
 
-const db = mysql.createConnection({
-  user: 'root',
-  host: 'localhost',
-  password: 'senha',
-  database: 'database_euax',
-
+export const db = mysql.createConnection({
+  user: process.env.USER_DB,
+  host: process.env.HOST,
+  password: process.env.PASSWORD,
+  database: process.env.DB,
 });
-
 app.listen(process.env.PORT || 3001, () => {
   console.log("server start");
 });
 
-app.post('/store', (req, res) => {
-  const name = req.body.name;
-  const startDate = req.body.startDate;
-  const endDate = req.body.endDate;
-
-  db.query(
-    "INSERT INTO projects (name, start_date, end_date) VALUES (?, ?, ?)",
-    [name, startDate, endDate],
-    (err, result) => {
-      if(err) {
-        console.log(err);
-      }else {
-        res.send('Values Inserted');
-      }
-    }
-  )
-
-})
