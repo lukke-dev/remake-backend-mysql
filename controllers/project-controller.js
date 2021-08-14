@@ -1,4 +1,4 @@
-import {db} from '../server.js'
+import { db } from "../server.js";
 
 export const storeProject = (req, res) => {
   const name = req.body.name;
@@ -9,12 +9,11 @@ export const storeProject = (req, res) => {
     "INSERT INTO projects (name, start_date, end_date) VALUES (?, ?, ?)",
     [name, startDate, endDate],
     (err) => {
-      if(err) {
+      if (err) {
         console.log(err);
-      }else {
-        res.send('Values Inserted');
+      } else {
+        res.send("Project Inserted");
       }
     }
-  )
-
-}
+  );
+};
